@@ -1,0 +1,8 @@
+{
+  "name": "Horizon of My Life",
+  "short_name": "Horizon",
+  "icons": [{ "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }],
+  "theme_color": "#04050d",
+  "background_color": "#04050d",
+  "display": "standalone"
+}
