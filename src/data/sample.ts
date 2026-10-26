@@ -52,23 +52,24 @@ export const sampleData: LifeData = {
       "steps": [
         {
           "id": "en2",
-          "title": "TOEIC 800突破",
-          "due": "2026-06",
+          "title": "TOEIC 860点 突破",
+          "due": "2027-10",
           "done": false
         },
         {
-          "id": "en3",
-          "title": "英語で社内プレゼン",
-          "due": "2027-01",
-          "done": false
+          "id": "2o5ee36m",
+          "title": "IELTS General Training 各7.0",
+          "done": false,
+          "due": "2027-12"
         },
         {
-          "id": "en4",
-          "title": "TOEIC 900突破",
-          "due": "2027-06",
-          "done": false
+          "id": "su9qbgv7",
+          "title": "英検準1級 取得",
+          "done": false,
+          "due": "2027-02"
         }
-      ]
+      ],
+      "startDate": "2026-01"
     },
     {
       "id": "g-global",
@@ -78,32 +79,8 @@ export const sampleData: LifeData = {
       "description": "日本を出る",
       "targetDate": "2028-07",
       "createdAt": "2026-01",
-      "steps": [
-        {
-          "id": "gl1",
-          "title": "海外カンファレンスに参加",
-          "due": "2027-09",
-          "done": false
-        },
-        {
-          "id": "gl2",
-          "title": "海外チームとの協業プロジェクト",
-          "due": "2028-06",
-          "done": false
-        },
-        {
-          "id": "gl3",
-          "title": "移住先・ビザのリサーチ",
-          "due": "2029-03",
-          "done": false
-        },
-        {
-          "id": "gl4",
-          "title": "海外拠点へ異動",
-          "due": "2030-04",
-          "done": false
-        }
-      ]
+      "steps": [],
+      "startDate": "2026-01"
     },
     {
       "id": "g-app",
@@ -114,12 +91,6 @@ export const sampleData: LifeData = {
       "targetDate": "2027-03",
       "createdAt": "2026-01",
       "steps": [
-        {
-          "id": "ap1",
-          "title": "アイデアを50個書き出す",
-          "due": "2026-03",
-          "done": true
-        },
         {
           "id": "ap2",
           "title": "プロトタイプを作る",
@@ -150,27 +121,21 @@ export const sampleData: LifeData = {
       "createdAt": "2026-06",
       "steps": [
         {
-          "id": "sd1",
-          "title": "技術ブログを月4本",
-          "due": "2027-01",
-          "done": false
-        },
-        {
           "id": "sd2",
           "title": "アプリの収益化",
-          "due": "2027-06",
+          "due": "2027-03",
           "done": false
         },
         {
           "id": "sd3",
           "title": "月5万円達成",
-          "due": "2028-01",
+          "due": "2027-06",
           "done": false
         },
         {
           "id": "sd4",
           "title": "月10万円達成",
-          "due": "2028-12",
+          "due": "2027-08",
           "done": false
         }
       ]
