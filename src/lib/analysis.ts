@@ -4,8 +4,9 @@ import { fromIdx, monthsUntil, nowYM, toIdx } from "./date";
 export const goalProgress = (g: Goal): number =>
   g.steps.length ? g.steps.filter((s) => s.done).length / g.steps.length : 0;
 
-/** ロードマップ上のバーの開始月：作成月と各ステップ期日のうち最も早いもの */
+/** ロードマップ上のバーの開始月：指定があればそれ、なければ作成月と各ステップ期日のうち最も早いもの */
 export function goalStart(g: Goal): string {
+  if (g.startDate) return fromIdx(Math.min(toIdx(g.startDate), toIdx(g.targetDate)));
   const idxs = [g.createdAt, ...g.steps.map((s) => s.due).filter(Boolean)].map((d) => toIdx(d!));
   return fromIdx(Math.min(...idxs, toIdx(g.targetDate)));
 }

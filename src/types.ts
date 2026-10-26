@@ -25,6 +25,8 @@ export interface Goal {
   description: string;
   category: CategoryId;
   targetDate: YearMonth;
+  /** ロードマップの開始月。未設定なら作成月と各ステップ期日から自動で決める */
+  startDate?: YearMonth;
   /** 1=通常, 2=重要, 3=最重要（コンステレーション上のノードの大きさに反映） */
   priority: 1 | 2 | 3;
   createdAt: YearMonth;

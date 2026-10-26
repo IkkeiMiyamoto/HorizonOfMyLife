@@ -22,6 +22,7 @@ export default function GoalEditor({ goal, onSave, onClose, onManageCategories }
   // 編集中にカテゴリが削除された場合は先頭のカテゴリにする
   const category = CATEGORIES.some((c) => c.id === pickedCategory) ? pickedCategory : (CATEGORIES[0]?.id ?? "");
   const [targetDate, setTargetDate] = useState(goal?.targetDate ?? fromIdx(toIdx(nowYM()) + 24));
+  const [startDate, setStartDate] = useState(goal?.startDate ?? "");
   const [priority, setPriority] = useState<Goal["priority"]>(goal?.priority ?? 2);
   const [stepsText, setStepsText] = useState("");
 
@@ -39,6 +40,7 @@ export default function GoalEditor({ goal, onSave, onClose, onManageCategories }
       description: description.trim(),
       category,
       targetDate,
+      startDate: startDate || undefined,
       priority,
       createdAt: goal?.createdAt ?? nowYM(),
       steps: [...(goal?.steps ?? []), ...newSteps],
@@ -87,23 +89,27 @@ export default function GoalEditor({ goal, onSave, onClose, onManageCategories }
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
+            <label className="label">始める時期</label>
+            <DatePicker mode="month" value={startDate} onChange={setStartDate} max={targetDate} allowClear placeholder="自動" ariaLabel="始める時期" />
+          </div>
+          <div>
             <label className="label">達成したい時期</label>
             <DatePicker mode="month" value={targetDate} onChange={setTargetDate} ariaLabel="達成したい時期" />
           </div>
-          <div>
-            <label className="label">重要度</label>
-            <div className="flex gap-1.5">
-              {([1, 2, 3] as const).map((p) => (
-                <button
-                  type="button"
-                  key={p}
-                  onClick={() => setPriority(p)}
-                  className={`flex-1 rounded-lg border py-2 text-sm transition-all ${priority === p ? "border-amber-300/60 bg-amber-300/10 text-amber-200" : "border-white/10 text-slate-400"}`}
-                >
-                  {"★".repeat(p)}
-                </button>
-              ))}
-            </div>
+        </div>
+        <div>
+          <label className="label">重要度</label>
+          <div className="flex gap-1.5">
+            {([1, 2, 3] as const).map((p) => (
+              <button
+                type="button"
+                key={p}
+                onClick={() => setPriority(p)}
+                className={`flex-1 rounded-lg border py-2 text-sm transition-all ${priority === p ? "border-amber-300/60 bg-amber-300/10 text-amber-200" : "border-white/10 text-slate-400"}`}
+              >
+                {"★".repeat(p)}
+              </button>
+            ))}
           </div>
         </div>
         <div>
