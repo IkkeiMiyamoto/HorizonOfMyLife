@@ -12,6 +12,7 @@ export type Action =
   | { type: "updateGoal"; id: string; patch: Partial<Goal> }
   | { type: "deleteGoal"; id: string }
   | { type: "addStep"; goalId: string; step: Step }
+  | { type: "updateStep"; goalId: string; stepId: string; patch: Partial<Omit<Step, "id">> }
   | { type: "toggleStep"; goalId: string; stepId: string }
   | { type: "deleteStep"; goalId: string; stepId: string }
   | { type: "addLink"; link: Link }
@@ -41,6 +42,11 @@ function reducer(state: LifeData, action: Action): LifeData {
       };
     case "addStep":
       return mapGoal(state, action.goalId, (g) => ({ ...g, steps: [...g.steps, action.step] }));
+    case "updateStep":
+      return mapGoal(state, action.goalId, (g) => ({
+        ...g,
+        steps: g.steps.map((s) => (s.id === action.stepId ? { ...s, ...action.patch } : s)),
+      }));
     case "toggleStep":
       return mapGoal(state, action.goalId, (g) => ({
         ...g,

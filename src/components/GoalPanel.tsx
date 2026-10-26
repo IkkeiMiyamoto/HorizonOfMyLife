@@ -30,6 +30,7 @@ export default function GoalPanel({ data, goal, dispatch, onClose, onEdit, onSel
   const [linkType, setLinkType] = useState<LinkType>("boosts");
   const [linkTarget, setLinkTarget] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [editingStep, setEditingStep] = useState<{ id: string; title: string; due: string } | null>(null);
 
   const steps = [...goal.steps].sort((a, b) => toIdx(a.due ?? "9999-12") - toIdx(b.due ?? "9999-12"));
   const outgoing = data.links.filter((l) => l.source === goal.id);
@@ -47,6 +48,18 @@ export default function GoalPanel({ data, goal, dispatch, onClose, onEdit, onSel
     if (!stepTitle.trim()) return;
     dispatch({ type: "addStep", goalId: goal.id, step: { id: uid(), title: stepTitle.trim(), done: false, due: stepDue || undefined } });
     setStepTitle("");
+  };
+
+  const saveStep = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingStep || !editingStep.title.trim()) return;
+    dispatch({
+      type: "updateStep",
+      goalId: goal.id,
+      stepId: editingStep.id,
+      patch: { title: editingStep.title.trim(), due: editingStep.due || undefined },
+    });
+    setEditingStep(null);
   };
 
   const addLink = (e: React.FormEvent) => {
@@ -115,6 +128,38 @@ export default function GoalPanel({ data, goal, dispatch, onClose, onEdit, onSel
             {steps.length > 1 && <div className="absolute bottom-4 left-[17px] top-4 w-px bg-white/10" />}
             {steps.map((s) => {
               const overdue = !s.done && s.due && toIdx(s.due) < toIdx(nowYM());
+              if (editingStep?.id === s.id) {
+                return (
+                  <li key={s.id} className="relative rounded-xl bg-white/[0.04] px-2 py-2">
+                    <form onSubmit={saveStep} onKeyDown={(e) => e.key === "Escape" && setEditingStep(null)} className="flex gap-2">
+                      <input
+                        className="input flex-1"
+                        autoFocus
+                        value={editingStep.title}
+                        onChange={(e) => setEditingStep({ ...editingStep, title: e.target.value })}
+                        aria-label="ステップ名"
+                      />
+                      <DatePicker
+                        mode="month"
+                        value={editingStep.due}
+                        onChange={(due) => setEditingStep({ ...editingStep, due })}
+                        allowClear
+                        placeholder="期日"
+                        ariaLabel="期日"
+                        className="!w-[140px] shrink-0"
+                      />
+                    </form>
+                    <div className="mt-2 flex justify-end gap-2">
+                      <button type="button" className="btn-ghost !px-2.5 !py-1 text-xs" onClick={() => setEditingStep(null)}>
+                        キャンセル
+                      </button>
+                      <button type="button" className="btn-primary !px-2.5 !py-1 text-xs" disabled={!editingStep.title.trim()} onClick={saveStep}>
+                        保存
+                      </button>
+                    </div>
+                  </li>
+                );
+              }
               return (
                 <li key={s.id} className="group relative flex items-center gap-3 rounded-xl px-2 py-2 hover:bg-white/[0.04]">
                   <button
@@ -131,6 +176,13 @@ export default function GoalPanel({ data, goal, dispatch, onClose, onEdit, onSel
                   </button>
                   <span className={`flex-1 text-sm ${s.done ? "text-slate-400 line-through decoration-slate-600" : "text-slate-100"}`}>{s.title}</span>
                   {s.due && <span className={`font-display text-xs ${overdue ? "text-rose-300" : "text-slate-400"}`}>{fmtShortYM(s.due)}</span>}
+                  <button
+                    onClick={() => setEditingStep({ id: s.id, title: s.title, due: s.due ?? "" })}
+                    className="text-slate-500 opacity-0 transition-opacity hover:text-slate-200 group-hover:opacity-100"
+                    aria-label="ステップを編集"
+                  >
+                    <Pencil size={14} />
+                  </button>
                   <button
                     onClick={() => dispatch({ type: "deleteStep", goalId: goal.id, stepId: s.id })}
                     className="text-slate-500 opacity-0 transition-opacity hover:text-rose-400 group-hover:opacity-100"
